@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Setiap user hanya bisa membaca/menulis chat miliknya sendiri.
+    // Agar hanya KAMU yang bisa memakai, tambahkan:
+    //   && request.auth.token.email == "emailkamu@gmail.com"
+    match /users/{uid}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}
